@@ -31,7 +31,6 @@ class PublicacionViewSet(viewsets.ModelViewSet):
 
       if request.method == 'POST':
          tag_id = request.data['tags_ids']
-
          for id_tag in tag_id:
             try:
                tag = Tag.objects.get(id=id_tag)
@@ -52,30 +51,11 @@ class PublicacionViewSet(viewsets.ModelViewSet):
          serializer = TagSerializer(publicacion.tag, many=True)
          return Response(status=status.HTTP_200_OK, data=serializer.data)
 
-   @action(methods=['GET', 'POST', 'DELETE'], detail=True)
+   @action(methods=['GET'], detail=True)
    def comentarios(self, request, pk=None):
       publicacion = self.get_object()
-
+      print("hola")
+      print(publicacion)
       if request.method == 'GET':
-         serializer = ComentarioSerializer(publicacion.comentarios, many=True)
-         return Response(status=status.HTTP_200_OK, data=serializer.data)
-
-      if request.method == 'POST':
-         comet_id = request.data['comentarios_ids']
-
-         for id_com in comet_id:
-            comentario = Comentario.objects.get(id=id_com)
-            publicacion.comentarios.add(comentario)
-
-         serializer = ComentarioSerializer(publicacion.comentarios, many=True)
-         return Response(status=status.HTTP_201_CREATED, data=serializer.data)
-
-      if request.method == 'DELETE':
-         comet_id = request.data['comentarios_ids']
-
-         for id_com in comet_id:
-            comentario = Comentario.objects.get(id=id_com)
-            publicacion.comentarios.remove(comentario)
-
-         serializer = ComentarioSerializer(publicacion.comentarios, many=True)
+         serializer = ComentarioSerializer(publicacion.comentarios,many=True)
          return Response(status=status.HTTP_200_OK, data=serializer.data)
